@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Link } from 'react-router-dom'
 const Menu = () => {
   return (
     <nav className="bg-gray-50 dark:bg-gray-700">
@@ -7,10 +7,15 @@ const Menu = () => {
             <div className="flex items-center">
                 <ul className="flex flex-row mt-0 mr-6 space-x-8 text-sm font-medium">
                     <li>
-                        <a href="#" className="text-gray-900 dark:text-white hover:underline" aria-current="page"><i className="bi bi-house-door mr-2"></i>Home</a>
+                        <Link to="/" className="text-gray-900 dark:text-white hover:underline">
+                            <i className="bi bi bi-journal-text mr-2"></i>Notes
+                        </Link>
+                        <a href="#" className="text-gray-900 dark:text-white hover:underline" aria-current="page"></a>
                     </li>
                     <li>
-                        <a href="#" className="text-gray-900 dark:text-white hover:underline"><i className="bi bi-journal-plus mr-2"></i>Create Task</a>
+                        <Link to={"/newnote"}  className="text-gray-900 dark:text-white hover:underline">
+                            <i className="bi bi-pencil-square mr-2"></i>New note
+                        </Link>
                     </li>
                 </ul>
             </div>

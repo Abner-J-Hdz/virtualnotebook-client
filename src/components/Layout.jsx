@@ -7,7 +7,9 @@ const Layout = ({ children }) => {
     <div>
         <Header/>
         <Menu/>
-        {children}
+        <div className="max-w-screen-xl px-4 py-3 mx-auto md:px-6">
+            {children}
+        </div>
     </div>
   )
 }
