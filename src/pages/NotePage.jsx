@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import { createNoteRequest } from '../api/noteApi';
 import EditorQuill from '../components/EditorQuill';
 import TextEditor from '../components/TextEditor';
 
 const NotePage = () => {
+  
   const [title, setTitle] = useState("");
   const [noteBody, setNoteBody] = useState("");
   const [counter, setCounter] = useState(0)
@@ -13,35 +14,37 @@ const NotePage = () => {
 
   const navigate = useNavigate();
 
-const maxCharacters = 500;
+  const maxCharacters = 500;
 
-const createNote = async (note) =>
-{
-    try {
-        const response = await createNoteRequest(note)
-        console.log(response)
-        if(response.status === 200){
-          toast.success('created Note')
+  const handleSubmit = (e) => {
+    setDisabled(true);
+    e.preventDefault();
+
+    if(!title || !noteBody){
+      setDisabled(false);
+      toast.error("Title and note body is required!")
+      return;
+    }
+
+    const note = {
+      IdNote: 0,
+      title,
+      body: noteBody
+    }
+
+    toast.promise(createNoteRequest(note), {
+        loading: 'Loading',
+        success: 'Note created',
+        error: 'Error when fetching',
+    }).then((data)=>{
+      console.log(data)
+        if(data.status === 200){
           setTimeout(() => {
             navigate("/")
-          }, 1000);
+          }, 2500);
         }
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-const handleSubmit = (e) => {
-  setDisabled(true);
-  e.preventDefault();
-  const note = {
-    IdNote: 0,
-    title,
-    body: noteBody
+    })
   }
-  
-  createNote(note);
-}
 
   return (
   <>
@@ -60,16 +63,42 @@ const handleSubmit = (e) => {
             <span>{counter} / {maxCharacters}</span>
           </div>
           <div className='mb-6'>
+            <div style={{height:'300px'}}> 
             <EditorQuill noteBody={noteBody} setNoteBody={setNoteBody} setCounter={setCounter} maxCharacters={maxCharacters} isNew={true} disabled={disabled} />   
+
+            </div>
           </div>
           <div className='mb-6'>
             <button type="submit" className="block bg-slate-800 px-2 py-1 w-full rounded-md text-white" disabled={disabled} >
               <i className="bi bi-plus-circle mr-2"/> 
               Save
             </button>
-
           </div>
         </form>
+        <Toaster
+            position="top-center"
+            reverseOrder={false}
+            gutter={8}
+            containerClassName=""
+            containerStyle={{}}
+            toastOptions={{
+              className: '',
+              duration: 3000,
+              style: {
+                background: '#1724c9',
+                color: '#fff',
+              },
+
+              success: {
+                duration: 3000,
+                theme: {
+                  primary: 'green',
+                  secondary: 'black',
+                },
+              },
+            }}
+          />
+
       </div>
   </>
 

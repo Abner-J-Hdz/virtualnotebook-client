@@ -42,13 +42,13 @@ const EditorQuill = ({noteBody, setNoteBody, setCounter, isNew, maxCharacters, d
     }
 
     return (
-        <div style={{height: "460px"}}>
+        <div style={{height: "300px"}}>
             <ReactQuill
             ref={(quill) => {
                 setReactQuillRef(quill)
             }}
             readOnly={disabled}
-            style={{ height: "400px" }}
+            style={{ height: "230px" }}
             modules={ isNew ? modules : moduleWithoutToolbar}
             theme="snow"
             value={noteBody}
