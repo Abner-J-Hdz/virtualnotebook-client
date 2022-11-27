@@ -4,21 +4,21 @@ import TextEditor from '../components/TextEditor';
 
 const NotePage = () => {
   const [title, setTitle] = useState("");
-  const [noteBody, setNoteBody] = useState("<h3>Hacer el proyecto de <strong>netFormost</strong></h3><p><em><u>abner</u></em></p>");
-
-  const handleUpdate = (bodyValue) => {
-    setNoteBody(bodyValue);
+  const [noteBody, setNoteBody] = useState("");
+  const [counter, setCounter] = useState(0)
 
 
-
-  }
 
 const handleSubmit = (e) => {
   e.preventDefault();
-console.log(e)
+  
   const note = {
-    title
+    IdNote: 0,
+    title,
+    body: noteBody
   }
+
+  console.log(note)
 }
 
   return (
@@ -34,10 +34,12 @@ console.log(e)
             <input type="text" name='title' onChange={(e) => setTitle(e.target.value)}
             className="border-b py-1 focus:outline-none focus:border-blue-900 focus:border-b-2 transition-colors peer w-full text-blue-900" autoComplete="off"/>
           </div> 
-          
+          <div className='mb-1'>
+            <span>{counter} / 500</span>
+          </div>
           <div className='mb-6'>
             {/* <TextEditor noteBody={noteBody} setNoteBody={setNoteBody}  /> */}
-            <EditorQuill noteBody={noteBody} setNoteBody={setNoteBody}  />   
+            <EditorQuill noteBody={noteBody} setNoteBody={setNoteBody} setCounter={setCounter} isNew={true} />   
           </div>
           <div className='mb-6'>
             <button type="submit" className="block bg-slate-800 px-2 py-1 w-full rounded-md text-white" >
