@@ -2,23 +2,30 @@ import React,  { useRef, useState } from 'react'
 import ReactQuill, { Quill } from 'react-quill';
 import toolbar from '../utils/ToolBar';
 
-const EditorQuill = ({noteBody, setNoteBody, setCounter, isNew}) => {
+const EditorQuill = ({noteBody, setNoteBody, setCounter, isNew, maxCharacters, disabled}) => {
 
     ///reactQuillRef va hacer referencia a el editor para poder obtener propiedades extras como el getLength
     const [reactQuillRef , setReactQuillRef ] = useState(null)
-    const maxCharacters = 100;
+
 
     const handleChange = (value) => {
         let counterLength = reactQuillRef.unprivilegedEditor.getLength();
 
-        counterLength-= 1;
+        counterLength -= 1;
         setCounter(counterLength)
 
-        if(counterLength <= 100 )
+        if(counterLength <= maxCharacters ){
             setNoteBody( value );
+            setCounter(counterLength)
+        }
     }
 
     const checkCharacterCount = (event) => {
+        //no permitimos el ctrl v
+        if(event.keyCode === 86  && event.ctrlKey){
+            event.preventDefault();
+        }
+                
         ///validamos que no se pase del maximo de caracteres que ya establecimos
         ///si se alcanza la longitud máxima de caracteres, onChange no se activará.
         if (reactQuillRef.unprivilegedEditor.getLength() > maxCharacters && event.key !== 'Backspace') {
@@ -40,7 +47,7 @@ const EditorQuill = ({noteBody, setNoteBody, setCounter, isNew}) => {
             ref={(quill) => {
                 setReactQuillRef(quill)
             }}
-            
+            readOnly={disabled}
             style={{ height: "400px" }}
             modules={ isNew ? modules : moduleWithoutToolbar}
             theme="snow"
