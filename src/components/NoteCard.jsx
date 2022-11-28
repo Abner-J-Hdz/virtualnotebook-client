@@ -10,7 +10,6 @@ const NoteCard = ({note}) => {
     const [noteBody, setNoteBody] = useState(note.body);
     const [counter, setCounter] = useState(500)
     const navigate = useNavigate();
-    console.log(note)
 
     return (
         <>
