@@ -69,7 +69,7 @@ const NotePage = () => {
           </div>
           <div className='mb-6'>
             <button type="submit" className="block bg-slate-800 px-2 py-1 w-full rounded-md text-white" disabled={disabled} >
-              <i className="bi bi-plus-circle mr-2"/> 
+              <i className="bi bi-journal-bookmark mr-2"/> 
               Save
             </button>
           </div>

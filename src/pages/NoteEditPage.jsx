@@ -93,7 +93,7 @@ const NoteEditPage = () => {
           </div>
           <div className='mb-6'>
             <button type="submit" className="block bg-slate-800 px-2 py-1 w-full rounded-md text-white" disabled={disabled} >
-              <i className="bi bi-plus-circle mr-2"/> 
+              <i className="bi bi-journal-check mr-2"/> 
               Update
             </button>
           </div>
@@ -120,7 +120,7 @@ const NoteEditPage = () => {
                 },
               },
             }}
-          />
+        />
 
       </div>
   </>
