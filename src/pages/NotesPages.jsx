@@ -40,15 +40,14 @@ const Notes = () => {
   }
 
   const handleFilterBy = (e) => {
-    console.log(e.target.value)
-    let selectValue = e.target.value;
-
-    setFilterBy(e.target.value)
-
-    if(selectValue === 1){
-    ///fecha
+  
+    if(filterBy == 1){
+      loadNote()
     }else{
-
+      setNoteBackup(notes)
+      setNotes(notes.sort((a,b) => a.title.localeCompare(b.title)))
+      console.log(notes)
+      renderNotes(false)
     }
   }
 
@@ -89,20 +88,20 @@ const Notes = () => {
         <div className='grid grid-cols-3 gap-2 py-3'> 
           <div>
             <label className="block mb-2 text-sm font-medium ">Filter by:</label>
-            <select onChange={handleFilterBy} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select onChange={e => setFilterBy(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <option value={1} defaultValue>Fecha</option>
               <option value={2}>Title</option>
             </select>
           </div>
-          <div>
+          {/* <div>
             <label  className="block mb-2 text-sm font-medium ">Order:</label>
             <select  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <option value={1} defaultValue>Asc</option>
               <option value={2}>Desc</option>
             </select>
-          </div>
+          </div> */}
           <div className='text-center'>
-            <label  className="block mb-2 text-sm font-medium ">Filtar:</label>
+            <label  className="block mb-2 text-sm font-medium ">Filter:</label>
             <button 
               onClick={handleFilterBy}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-blue-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
