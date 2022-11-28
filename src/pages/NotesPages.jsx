@@ -20,7 +20,6 @@ const Notes = () => {
 
   useEffect(() => {
     loadNote()
-    console.log(notes)
   }, [])
 
 
@@ -33,7 +32,7 @@ const Notes = () => {
     if(filter){
       setNoteBackup(notes)
       setNotes(notes.filter(note => note.title.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || note.body.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ))
-      renderNotes(true)
+      renderNotes(false)
     }else{
       loadNote()
     }
@@ -42,11 +41,15 @@ const Notes = () => {
   const handleFilterBy = (e) => {
   
     if(filterBy == 1){
-      loadNote()
+      loadNote();
+      setNoteBackup(notes)
+      setNotes(notes.sort((a,b) => new Date(a.updated)  - new Date(b.updated)))
+      console.log(notes)
+      renderNotes(false)
     }else{
+
       setNoteBackup(notes)
       setNotes(notes.sort((a,b) => a.title.localeCompare(b.title)))
-      console.log(notes)
       renderNotes(false)
     }
   }
@@ -54,8 +57,8 @@ const Notes = () => {
   function renderNotes(isFilter){
     if(isFilter){
       if(noteBackup.length == 0)
-      return <h1>No notes!!!</h1>
-        return noteBackup.map((note) =>(<NoteCard note={note} key={note.idNote} />))
+        return <h1>No notes!!!</h1>
+      return noteBackup.map((note) =>(<NoteCard note={note} key={note.idNote} />))
     }else{
       if(notes.length == 0)
           return <h1>No notes yet!!!</h1>
