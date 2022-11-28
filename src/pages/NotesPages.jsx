@@ -1,18 +1,85 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast';
 import { getNoteRequest } from '../api/noteApi';
+import NoteCard from '../components/NoteCard';
 
 const Notes = () => {
 
+  const [notes, setNotes] = useState([])
+
   const loadNote = async () => {
     const response = await getNoteRequest();
-    //console.log(response)
-    console.log(response.data)
+    
+    setNotes(response.data)
+  
   }
 
-  loadNote()
+  useEffect(() => {
+    loadNote()
+    console.log(notes)
+  }, [])
+
+
+  
+
+
+  const handleSubmit = (e)  => {
+    e.preventDefault();
+    console.log("filtrar datos")
+  }
+
+  function renderNotes(){
+    if(notes.length == 0)
+        return <h1>No notes yet!!!</h1>
+    return notes.map((note) =>(<NoteCard note={note} key={note.idNote} />))
+  }
+
 
   return (
-    <div>Notes</div>
+    <>
+      <div className="w-300 max-w-screen-sm mr-auto ml-auto bg-white rounded shadow-lg p-4">
+        <h1 className="block w-full text-center text-blue-900 mb-6 text-2xl">
+          <i className="bi bi-journal-text mr-2 text-blue-900"></i>Notes
+        </h1>
+
+        <form className="mb-4" onSubmit={handleSubmit}>
+        <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+        <div className="relative">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input type="search" id="default-search" className="block w-full p-4 pl-10 text-sm text-gray-900 border rounded-lg focus:ring-blue-500 dark:focus:border-blue-900 focus:border-blue-500 dark:placeholder-gray-400 ring-blue-500 border-blue-500" placeholder="Search Mockups, Logos..." required />
+            <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+        </div>
+        </form>
+        <div className="grid grid-cols-2 gap-2 py-7">
+            {renderNotes()}
+        </div>
+        <Toaster
+            position="top-center"
+            reverseOrder={false}
+            gutter={8}
+            containerClassName=""
+            containerStyle={{}}
+            toastOptions={{
+              className: '',
+              duration: 3000,
+              style: {
+                background: '#1724c9',
+                color: '#fff',
+              },
+
+              success: {
+                duration: 3000,
+                theme: {
+                  primary: 'green',
+                  secondary: 'black',
+                },
+              },
+            }}
+        />
+      </div>
+    </>
   )
 }
 

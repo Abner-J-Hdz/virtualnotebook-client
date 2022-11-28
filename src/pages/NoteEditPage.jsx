@@ -1,20 +1,41 @@
-import React, { useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
-import { createNoteRequest } from '../api/noteApi';
+import { updateNoteRequest, getOneNoteRequest } from '../api/noteApi';
 import EditorQuill from '../components/EditorQuill';
 import TextEditor from '../components/TextEditor';
+import axios from "axios";
 
-const NotePage = () => {
+const NoteEditPage = () => {
   
+  const params = useParams();
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [noteBody, setNoteBody] = useState("");
   const [counter, setCounter] = useState(0)
   const [disabled, setDisabled] = useState(false);
-
-  const navigate = useNavigate();
-
   const maxCharacters = 500;
+
+  const getNote = async () => {
+    const response = await getOneNoteRequest(params.id);
+    let note = response.data;
+
+    setTitle(note.title)
+    setNoteBody(note.body)
+
+  }
+
+  useEffect(() => {
+      getNote()
+  }, [])
+
+  const updateNote = async (note) => {
+      console.log(note)
+      const response = await updateNoteRequest(note)
+      console.log(response)
+  }
+
 
   const handleSubmit = (e) => {
     setDisabled(true);
@@ -27,14 +48,14 @@ const NotePage = () => {
     }
 
     const note = {
-      IdNote: 0,
+      idNote: parseInt(params.id),
       title,
       body: noteBody
     }
 
-    toast.promise(createNoteRequest(note), {
+    toast.promise(updateNoteRequest(note), {
         loading: 'Loading',
-        success: 'Note created',
+        success: 'Note updated',
         error: 'Error when fetching',
     }).then((data)=>{
       console.log(data)
@@ -43,6 +64,9 @@ const NotePage = () => {
             navigate("/")
           }, 2500);
         }
+    }).catch((error)=>{
+      console.log(error)
+      setDisabled(false);
     })
   }
 
@@ -50,13 +74,13 @@ const NotePage = () => {
   <>
       <div className="w-300 max-w-screen-sm mr-auto ml-auto bg-white rounded shadow-lg p-4">
         <h1 className="block w-full text-center text-blue-900 mb-6 text-2xl">
-          <i className="bi bi-journal-plus mr-2 text-blue-900"></i>New note
+        <i className="bi bi-pen mr-2 text-blue-900"></i>Edit note
         </h1>
 
         <form className="mb-4" onSubmit={handleSubmit}>
           <div className="mb-6">
             <label htmlFor="title"  className="text-xl text-blue-900">Title</label>
-            <input type="text" name='title' onChange={(e) => setTitle(e.target.value)} disabled={disabled}
+            <input type="text" name='title' value={title} onChange={(e) => setTitle(e.target.value)} disabled={disabled}
             className="border-b py-1 focus:outline-none focus:border-blue-900 focus:border-b-2 transition-colors peer w-full text-blue-900" autoComplete="off"/>
           </div> 
           <div className='mb-1'>
@@ -70,7 +94,7 @@ const NotePage = () => {
           <div className='mb-6'>
             <button type="submit" className="block bg-slate-800 px-2 py-1 w-full rounded-md text-white" disabled={disabled} >
               <i className="bi bi-plus-circle mr-2"/> 
-              Save
+              Update
             </button>
           </div>
         </form>
@@ -104,4 +128,4 @@ const NotePage = () => {
   )
 }
 
-export default NotePage
+export default NoteEditPage
